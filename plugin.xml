@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-paypoint" version="0.1.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>PaypointIonic</name>
+    <js-module name="PaypointIonic" src="www/PaypointIonic.js">
+        <clobbers target="cordova.plugins.PaypointIonic" />
+    </js-module>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="PaypointIonic">
+                <param name="ios-package" value="PaypointIonic" />
+            </feature>
+        </config-file>
+        <!-- <framework src="HTTransmitter" type="podspec" spec="~> 0.12.6" />
+        <framework src="libsqlite3.dylib" /> -->
+        <source-file src="src/ios/iDock.framework" target-dir="lib" framework="true" arch="ARM"/>
+        <source-file src="src/ios/libCocoaLumberjack.a" framework="true" />
+        <source-file src="src/ios/PaypointIonic.m" />
+    </platform>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="PaypointIonic">
+                <param name="android-package" value="cordova-plugin-paypoint.PaypointIonic" />
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+        </config-file>
+        <framework custom="true" src="src/android/PaypointIonic.gradle" type="gradleReference" />
+        <resource-file src="src/android/elo-peripherals-refresh-sdk-release.aar" target="libs/elo-peripherals-refresh-sdk-release.aar" />
+        <source-file src="src/android/PaypointIonic.java" target-dir="src/cordova-plugin-paypoint/PaypointIonic" />
+    </platform>
+</plugin>
