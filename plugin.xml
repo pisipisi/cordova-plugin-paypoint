@@ -8,12 +8,26 @@
         <config-file parent="/*" target="config.xml">
             <feature name="PaypointIonic">
                 <param name="ios-package" value="PaypointIonic" />
+                <param name="onload" value="true" />
             </feature>
+        </config-file>
+        <config-file target="*-Info.plist" parent="UISupportedExternalAccessoryProtocols">
+            <array>
+                <string>com.elotouch.protocol</string>
+            </array>
+        </config-file>
+        <config-file target="*-Info.plist" parent="UIBackgroundModes">
+            <array>
+                <string>external-accessory</string> 
+                <string>bluetooth-peripheral</string> 
+            </array> 
         </config-file>
         <!-- <framework src="HTTransmitter" type="podspec" spec="~> 0.12.6" />
         <framework src="libsqlite3.dylib" /> -->
         <source-file src="src/ios/iDock.framework" target-dir="lib" framework="true" arch="ARM"/>
+        <source-file src="src/ios/CocoaLumberjack.framework" target-dir="lib" framework="true" arch="ARM"/>
         <source-file src="src/ios/libCocoaLumberjack.a" framework="true" />
+        <header-file src="src/ios/PaypointIonic.h" />
         <source-file src="src/ios/PaypointIonic.m" />
     </platform>
     <platform name="android">

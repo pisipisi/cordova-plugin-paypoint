@@ -1,28 +1,74 @@
 /********* PaypointIonic.m Cordova Plugin Implementation *******/
 
 #import <Cordova/CDV.h>
+#import <iDock/ETPPiDock.h>
 
 @interface PaypointIonic : CDVPlugin {
   // Member variables go here.
 }
-
-- (void)coolMethod:(CDVInvokedUrlCommand*)command;
+- (BOOL)openDraw:(CDVInvokedUrlCommand*)command;
+- (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command 
 @end
 
 @implementation PaypointIonic
 
-- (void)coolMethod:(CDVInvokedUrlCommand*)command
+- (BOOL)openDraw:(CDVInvokedUrlCommand*)command 
 {
-    CDVPluginResult* pluginResult = nil;
-    NSString* echo = [command.arguments objectAtIndex:0];
+    [[ETPPiDockControl hardwareInstance] openDrawer:^(BOOL didOpen) {
 
-    if (echo != nil && [echo length] > 0) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
-    } else {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-    }
 
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+	    [self.commandDelegate sendPluginResult:didOpen callbackId:command.callbackId];
+        if(didOpen) {
+			// Cash drawer is open
+        }else {
+            // Cash drawer is closed
+        }
+     }];
+}
+- (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command 
+{
+	if ([[ETPPiDockControl hardwareInstance] checkCashDrawerStatus]) {
+        return YES;//Cash drawer is open
+	} else {
+        return NO;//Cash drawer is closed
+   	 }
+}
+
+- (void)checkPaperStatus:(CDVInvokedUrlCommand*)command 
+{
+        [[ETPPiDockControl hardwareInstance] checkPaperStatusWithCompletionHandler:^(BOOL paperBinIsEmpty) {
+        if (paperBinIsEmpty) {
+
+        } else {
+
+        }
+    }];
+}
+
+
+// - (void)coolMethod:(CDVInvokedUrlCommand*)command
+// {
+//     CDVPluginResult* pluginResult = nil;
+//     NSString* echo = [command.arguments objectAtIndex:0];
+
+//     if (echo != nil && [echo length] > 0) {
+//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
+//     } else {
+//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+//     }
+
+//     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+// }
+
+- (void)pluginInitialize
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+
+}
+
+- (void)finishLaunching:(NSNotification *)notification
+{
+    [[ETPPiDockControl hardwareInstance] establishFirmwareConnection];
 }
 
 @end
