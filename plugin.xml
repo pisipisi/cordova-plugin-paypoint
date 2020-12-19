@@ -24,8 +24,8 @@
         </config-file>
         <!-- <framework src="HTTransmitter" type="podspec" spec="~> 0.12.6" />
         <framework src="libsqlite3.dylib" /> -->
-        <source-file src="src/ios/iDock.framework" target-dir="lib" framework="true" arch="ARM"/>
-        <source-file src="src/ios/CocoaLumberjack.framework" target-dir="lib" framework="true" arch="ARM"/>
+        <source-file src="src/ios/iDock.framework" framework="true" arch="ARM"/>
+        <!-- <source-file src="src/ios/CocoaLumberjack.framework" target-dir="lib" framework="true" arch="ARM"/> -->
         <source-file src="src/ios/libCocoaLumberjack.a" framework="true" />
         <header-file src="src/ios/PaypointIonic.h" />
         <source-file src="src/ios/PaypointIonic.m" />
