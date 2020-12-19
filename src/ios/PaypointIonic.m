@@ -6,16 +6,13 @@
 
 - (BOOL)openDraw:(CDVInvokedUrlCommand*)command 
 {
-    [[ETPPiDockControl hardwareInstance] openDrawer:^(BOOL didOpen) {
-
-
-	    [self.commandDelegate sendPluginResult:didOpen callbackId:command.callbackId];
-        if(didOpen) {
-			// Cash drawer is open
-        }else {
-            // Cash drawer is closed
-        }
-     }];
+    [ETPPiDockControl hardwareInstance].openCashDrawerCompletionHandler = ^(BOOL didOpen) {
+        CDVPluginResult* result = [CDVPluginResult
+                                       resultWithStatus: CDVCommandStatus_OK
+                                       messageAsBool:didOpen
+                                       ];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    };
 }
 - (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command 
 {
