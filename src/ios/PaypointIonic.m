@@ -4,15 +4,17 @@
 
 @implementation PaypointIonic
 
-- (BOOL)openDraw:(CDVInvokedUrlCommand*)command 
+- (void)openDraw:(CDVInvokedUrlCommand*)command 
 {
-    [ETPPiDockControl hardwareInstance].openCashDrawerCompletionHandler = ^(BOOL didOpen) {
-        CDVPluginResult* result = [CDVPluginResult
-                                       resultWithStatus: CDVCommandStatus_OK
-                                       messageAsBool:didOpen
-                                       ];
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    };
+    [self.commandDelegate runInBackground: ^{
+        [ETPPiDockControl hardwareInstance].openCashDrawerCompletionHandler = ^(BOOL didOpen) {
+            CDVPluginResult* result = [CDVPluginResult
+                                           resultWithStatus: CDVCommandStatus_OK
+                                           messageAsBool:didOpen
+                                           ];
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        };
+    }];
 }
 - (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command 
 {

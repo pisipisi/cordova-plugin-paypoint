@@ -4,6 +4,6 @@
 @interface PaypointIonic : CDVPlugin {
   // Member variables go here.
 }
-- (BOOL)openDraw:(CDVInvokedUrlCommand*)command;
+- (void)openDraw:(CDVInvokedUrlCommand*)command;
 - (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command;
 @end

@@ -5,8 +5,7 @@
         <clobbers target="cordova.plugins.PaypointIonic" />
     </js-module>
     <platform name="ios">
-        <!-- <hook type="after_platform_add" src="hooks/embedframework/addEmbedded.js" /> -->
-
+        <hook type="after_platform_add" src="hooks/embedframework/addEmbedded.js" />
         <config-file parent="/*" target="config.xml">
             <feature name="PaypointIonic">
                 <param name="ios-package" value="PaypointIonic" />
@@ -28,6 +27,7 @@
         <framework src="libsqlite3.dylib" /> -->
         <framework src="src/ios/iDock.framework" custom="true"/>
         <framework src="src/ios/CocoaLumberjack.framework" embed="true" custom="true"/>
+        <!-- <source-file src="src/ios/CocoaLumberjack.framework" target-dir="lib" framework="true"/> -->
         <!-- <source-file src="src/ios/libCocoaLumberjack.a" framework="true" /> -->
         <header-file src="src/ios/PaypointIonic.h" />
         <source-file src="src/ios/PaypointIonic.m" />
