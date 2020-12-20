@@ -18,15 +18,13 @@
 }
 
 - (void)isPayPointConnected: (CDVInvokedUrlCommand*)command {
-  
-        [self.commandDelegate runInBackground: ^{
-            [ETPPiDockControl hardwareInstance].openCashDrawerCompletionHandler = ^(BOOL didOpen) {
-                CDVPluginResult* result = [CDVPluginResult
-                                               resultWithStatus: CDVCommandStatus_OK
-                                               messageAsBool:[[ETPPiDockControl hardwareInstance] isConnected]];
-                [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-            };
-        }];
+    CDVPluginResult *pluginResult = nil;
+    if([[ETPPiDockControl hardwareInstance] isConnected]]) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    } else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Not connected"];
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 };
 
 - (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command 
