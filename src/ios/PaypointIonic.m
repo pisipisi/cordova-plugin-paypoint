@@ -16,6 +16,19 @@
         };
     }];
 }
+
+- (void)isPayPointConnected: (CDVInvokedUrlCommand*)command {
+  
+        [self.commandDelegate runInBackground: ^{
+            [ETPPiDockControl hardwareInstance].openCashDrawerCompletionHandler = ^(BOOL didOpen) {
+                CDVPluginResult* result = [CDVPluginResult
+                                               resultWithStatus: CDVCommandStatus_OK
+                                               messageAsBool:[[ETPPiDockControl hardwareInstance] isConnected]];
+                [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            };
+        }];
+};
+
 - (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command 
 {
 	if ([[ETPPiDockControl hardwareInstance] checkCashDrawerStatus]) {

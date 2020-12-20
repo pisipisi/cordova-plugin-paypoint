@@ -5,5 +5,6 @@
   // Member variables go here.
 }
 - (void)openDraw:(CDVInvokedUrlCommand*)command;
+- (void)isPayPointConnected: (CDVInvokedUrlCommand*)command;
 - (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command;
 @end
