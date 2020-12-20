@@ -15,5 +15,6 @@
     "cordova-android"
   ],
   "author": "Thanh Nguyen",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {}
 }
