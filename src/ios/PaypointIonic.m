@@ -19,7 +19,7 @@
 
 - (void)isPayPointConnected: (CDVInvokedUrlCommand*)command {
     CDVPluginResult *pluginResult = nil;
-    if([[ETPPiDockControl hardwareInstance] isConnected]]) {
+    if([[ETPPiDockControl hardwareInstance] isConnected]) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Not connected"];

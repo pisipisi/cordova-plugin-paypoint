@@ -9,11 +9,11 @@ function convertToNativeJS(object) {
     });
 }
 exports.isPayPointConnected = function(success, error) {
-    var successWrapper = function(success) {
-        convertToNativeJS(success);
-        success(success);
-    };
-    exec(successWrapper, error, 'PaypointIonic', 'isPayPointConnected');
+    // var successWrapper = function(success) {
+    //     convertToNativeJS(success);
+    //     success(success);
+    // };
+    exec(success, error, 'PaypointIonic', 'isPayPointConnected');
 };
 
 exports.openDraw = function(success, error) {
