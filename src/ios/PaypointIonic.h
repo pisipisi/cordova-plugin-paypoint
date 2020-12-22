@@ -8,7 +8,7 @@
 - (void)cashDrawStatus:(CDVInvokedUrlCommand*) command;
 - (void)printSync:(CDVInvokedUrlCommand*) command;
 - (void)startDisplayCFDLine:(CDVInvokedUrlCommand*) command;
-- (void)setCustomerDisplayBacklineOnOff:(CDVInvokedUrlCommand*) command;
+- (void)setCustomerDisplayBacklightOnOff:(CDVInvokedUrlCommand*) command;
 - (void)customerDisplayStopScroll:(CDVInvokedUrlCommand*) command;
 - (void)customerDisplayClearText:(CDVInvokedUrlCommand*) command;
 - (void)customerDisplayDecreaseLeftScrollSpeed:(CDVInvokedUrlCommand*) command;

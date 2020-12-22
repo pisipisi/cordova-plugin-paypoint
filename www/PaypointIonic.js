@@ -51,8 +51,8 @@ exports.startDisplayCFDLine = function(line1, line2, success, error) {
     exec(success, error, 'PaypointIonic', 'startDisplayCFDLine',[line1, line2]);
 };
 
-exports.setCustomerDisplayBacklineOnOff = function(onOff, success, error) {
-    exec(success, error, 'PaypointIonic', 'setCustomerDisplayBacklineOnOff', [onOff]);
+exports.setCustomerDisplayBacklightOnOff = function(onOff, success, error) {
+    exec(success, error, 'PaypointIonic', 'setCustomerDisplayBacklightOnOff', [onOff]);
 };
 
 exports.customerDisplayStopScroll = function(success, error) {

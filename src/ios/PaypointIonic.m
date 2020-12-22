@@ -49,10 +49,10 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-- (void)setCustomerDisplayBacklineOnOff:(CDVInvokedUrlCommand*) command
+- (void)setCustomerDisplayBacklightOnOff:(CDVInvokedUrlCommand*) command
 {
     BOOL onOff = [command.arguments objectAtIndex:0];
-    [[ETPPiDockControl hardwareInstance] setCustomerDisplayBacklineOn:onOff];
+    [[ETPPiDockControl hardwareInstance] setCustomerDisplayBacklightOn:onOff];
     CDVPluginResult* result = [CDVPluginResult
                                    resultWithStatus: CDVCommandStatus_OK
                                    messageAsString:@"Successed"
