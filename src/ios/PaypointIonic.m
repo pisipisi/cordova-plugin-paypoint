@@ -51,7 +51,7 @@
 
 - (void)setCustomerDisplayBacklineOnOff:(CDVInvokedUrlCommand*) command
 {
-    bool onOff = [command.arguments objectAtIndex:0];
+    BOOL onOff = [command.arguments objectAtIndex:0];
     [[ETPPiDockControl hardwareInstance] setCustomerDisplayBacklineOn:onOff];
     CDVPluginResult* result = [CDVPluginResult
                                    resultWithStatus: CDVCommandStatus_OK
@@ -123,11 +123,11 @@
 
 - (void)setBarCodeReaderOnOff:(CDVInvokedUrlCommand*) command
 {
-    bool onOff = [command.arguments objectAtIndex:0];
+    BOOL onOff = [command.arguments objectAtIndex:0];
     [[ETPPiDockControl hardwareInstance] setBarcodeReaderOn:onOff];
     CDVPluginResult* result = [CDVPluginResult
                                    resultWithStatus: CDVCommandStatus_OK
-                                   messageAsString:@"Successed"
+                                   messageAsBool:[[ETPPiDockControl hardwareInstance] isBarcodeReaderOn]
                                    ];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
