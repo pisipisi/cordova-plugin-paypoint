@@ -84,7 +84,7 @@ exports.readBarCode = function(success, error) {
         convertToNativeJS(data);
         success(data);
     };
-    exec(successWrapper, error, 'PaypointIonic', 'readBarCode');
+    exec(success, error, 'PaypointIonic', 'readBarCode');
 }; 
 
 exports.clearMSR = function(success, error) {

@@ -142,12 +142,6 @@
         queue:mainQueue usingBlock:^(NSNotification *notification) {
         [self didReadBarCodeData : notification withCommand: command];
     }];
-
-    CDVPluginResult* result = [CDVPluginResult
-                                   resultWithStatus: CDVCommandStatus_OK
-                                   messageAsString:@"Successed"
-                                   ];
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 
@@ -157,7 +151,7 @@
     NSDictionary *data = notification.userInfo;
     CDVPluginResult* result = [CDVPluginResult
                                        resultWithStatus: CDVCommandStatus_OK
-                                       messageAsDictionary:data
+                                       messageAsString:data[@"bcrData"]
                                        ];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -183,11 +177,11 @@
     }];
     
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveObjectFromNotification: command:) name:IDMagneticStripeReaderReadDataNotification object:nil];
-    CDVPluginResult* result = [CDVPluginResult
-                                   resultWithStatus: CDVCommandStatus_OK
-                                   messageAsString:@"Successed"
-                                   ];
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    // CDVPluginResult* result = [CDVPluginResult
+    //                                resultWithStatus: CDVCommandStatus_OK
+    //                                messageAsString:@"Successed"
+    //                                ];
+    // [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)didReadMSRData:(NSNotification*)notification withCommand: (CDVInvokedUrlCommand*) command  {
