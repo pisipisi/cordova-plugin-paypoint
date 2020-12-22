@@ -5,6 +5,20 @@
   // Member variables go here.
 }
 - (void)openDraw:(CDVInvokedUrlCommand*)command;
+- (void)cashDrawStatus:(CDVInvokedUrlCommand*) command;
+- (void)printSync:(CDVInvokedUrlCommand*) command;
+- (void)startDisplayCFDLine:(CDVInvokedUrlCommand*) command;
+- (void)setCustomerDisplayBacklineOnOff:(CDVInvokedUrlCommand*) command;
+- (void)customerDisplayStopScroll:(CDVInvokedUrlCommand*) command;
+- (void)customerDisplayClearText:(CDVInvokedUrlCommand*) command;
+- (void)customerDisplayDecreaseLeftScrollSpeed:(CDVInvokedUrlCommand*) command;
+- (void)customerDisplayIncreaseLeftScrollSpeed:(CDVInvokedUrlCommand*) command;
+- (void)customerDisplayDecreaseRightScrollSpeed:(CDVInvokedUrlCommand*) command;
+- (void)customerDisplayIncreaseRightScrollSpeed:(CDVInvokedUrlCommand*) command;
+- (void)setBarCodeReaderOnOff:(CDVInvokedUrlCommand*) command;
+- (void)readBarCode:(CDVInvokedUrlCommand*) command;
+- (void)clearMSR:(CDVInvokedUrlCommand*) command;
+- (void)readMSR:(CDVInvokedUrlCommand*) command;
 - (void)isPayPointConnected: (CDVInvokedUrlCommand*)command;
 - (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command;
 @end
