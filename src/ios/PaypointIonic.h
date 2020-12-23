@@ -20,6 +20,7 @@
 - (void)readBarCode:(CDVInvokedUrlCommand*) command;
 - (void)clearMSR:(CDVInvokedUrlCommand*) command;
 - (void)readMSR:(CDVInvokedUrlCommand*) command;
+- (void)checkPaperStatus:(CDVInvokedUrlCommand*)command;
 - (void)isPayPointConnected: (CDVInvokedUrlCommand*)command;
-- (BOOL)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command;
+- (void)hardwareVersion:(CDVInvokedUrlCommand*)command;
 @end

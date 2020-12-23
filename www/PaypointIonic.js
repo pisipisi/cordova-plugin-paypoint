@@ -28,10 +28,6 @@ function convertToNativeJS(object) {
     });
 }
 exports.isPayPointConnected = function(success, error) {
-    // var successWrapper = function(success) {
-    //     convertToNativeJS(success);
-    //     success(success);
-    // };
     exec(success, error, 'PaypointIonic', 'isPayPointConnected');
 };
 
@@ -80,10 +76,6 @@ exports.setBarCodeReaderOnOff = function(onOff, success, error) {
 };
 
 exports.readBarCode = function(success, error) {
-    var successWrapper = function(data) {
-        convertToNativeJS(data);
-        success(data);
-    };
     exec(success, error, 'PaypointIonic', 'readBarCode');
 }; 
 
@@ -99,4 +91,10 @@ exports.readMSR = function(success, error) {
     exec(successWrapper, error, 'PaypointIonic', 'readMSR');
 };
 
+exports.checkPaperStatus = function(success, error) {
+    exec(success, error, 'PaypointIonic', 'checkPaperStatus');
+};
 
+exports.hardwareVersion = function(success, error) {
+    exec(success, error, 'PaypointIonic', 'hardwareVersion');
+};
