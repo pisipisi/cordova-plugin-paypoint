@@ -132,18 +132,31 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-
-- (void)readBarCode:(CDVInvokedUrlCommand*) command
+- (void) playSound
 {
-    [[ETPPiDockControl hardwareInstance] clearMSR];
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-    [center addObserverForName:IDBarcodeReaderReadDataNotification object:nil
-        queue:mainQueue usingBlock:^(NSNotification *notification) {
-        [self didReadBarCodeData : notification withCommand: command];
-    }];
+//    Play beep sound after barcode scan
+    SystemSoundID soundID;
+    NSString *path   = [[NSBundle mainBundle] pathForResource:@"aurora" ofType:@"m4r"];
+    NSURL* url = [NSURL fileURLWithPath:path];
+    CFURLRef soundFileURLRef;
+    soundFileURLRef = (__bridge CFURLRef) url;
+    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundID);
+    AudioServicesPlaySystemSound(soundID);
 }
 
+- (void)didReadBarCodeData:(NSNotification*)notification withCommand: (CDVInvokedUrlCommand*) command  {
+    
+    NSDictionary *data = notification.userInfo;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CDVPluginResult* result = [CDVPluginResult
+                                           resultWithStatus: CDVCommandStatus_OK
+                                           messageAsString:data[@"bcrData"]
+                                           ];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        [self playSound];
+    
+    });
+}
 
 
 - (void)didReadBarCodeData:(NSNotification*)notification withCommand: (CDVInvokedUrlCommand*) command  {
@@ -320,15 +333,64 @@
 //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 // }
 
+
 - (void)pluginInitialize
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accessoryDidConnect) name:IDAccessoryDidConnectNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accessoryDidDisconnect) name:IDAccessoryDidDisconnectNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRecieveHWVersion:) name:IDHWVersionNotification object:nil];
 
 }
 
 - (void)finishLaunching:(NSNotification *)notification
 {
     [[ETPPiDockControl hardwareInstance] establishFirmwareConnection];
+    [[ETPPiDockControl hardwareInstance] setBarcodeReaderOn:NO];
+}
+- (void)accessoryDidConnect {
+
+    [[ETPPiDockControl hardwareInstance] getFWResetReason];
+    
+    [[ETPPiDockControl hardwareInstance] clearFWResetReason];
+}
+
+- (void)accessoryDidDisconnect {
+    [HWVersion setVersion:HW_Unknown];
+}
+
+
+- (void) didRecieveHWVersion:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    
+    if(userInfo != nil)
+    {
+        NSString *value = [userInfo objectForKey:IDOCK_HW_VERSION];
+        
+        if(value != nil && [value isKindOfClass:[NSString class]])
+        {
+            NSString *hwVersion = (NSString *)value;
+            
+            if([hwVersion isEqualToString:@"2"])
+            {
+                [HWVersion setVersion:HW_V2];
+            }
+            else{
+                [HWVersion setVersion:HW_V1];
+            }
+        }
+        
+    }
+    
+    dispatch_async(dispatch_queue_create("version.notification", NULL), ^{
+       
+        [[NSNotificationCenter defaultCenter] postNotificationName:HWVersionNitification object:nil];
+        
+    });
 }
 
 @end

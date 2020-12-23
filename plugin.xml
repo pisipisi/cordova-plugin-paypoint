@@ -31,6 +31,8 @@
         <!-- <source-file src="src/ios/libCocoaLumberjack.a" framework="true" /> -->
         <header-file src="src/ios/PaypointIonic.h" />
         <source-file src="src/ios/PaypointIonic.m" />
+        <header-file src="src/ios/HWVersion.h" />
+        <source-file src="src/ios/HWVersion.m" />
     </platform>
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
