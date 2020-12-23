@@ -1,7 +1,7 @@
 /********* PaypointIonic.m Cordova Plugin Implementation *******/
 
 #import "PaypointIonic.h"
-
+#import "HWVersion.h"
 @implementation PaypointIonic
 
 - (void)openDraw:(CDVInvokedUrlCommand*)command 
@@ -51,7 +51,7 @@
 
 - (void)setCustomerDisplayBacklightOnOff:(CDVInvokedUrlCommand*) command
 {
-    BOOL onOff = [command.arguments objectAtIndex:0];
+    BOOL onOff = [[command.arguments objectAtIndex:0] boolValue];
     [[ETPPiDockControl hardwareInstance] setCustomerDisplayBacklightOn:onOff];
     CDVPluginResult* result = [CDVPluginResult
                                    resultWithStatus: CDVCommandStatus_OK
@@ -123,13 +123,23 @@
 
 - (void)setBarCodeReaderOnOff:(CDVInvokedUrlCommand*) command
 {
-    BOOL onOff = [command.arguments objectAtIndex:0];
+    BOOL onOff = [[command.arguments objectAtIndex:0] boolValue];
     [[ETPPiDockControl hardwareInstance] setBarcodeReaderOn:onOff];
     CDVPluginResult* result = [CDVPluginResult
                                    resultWithStatus: CDVCommandStatus_OK
                                    messageAsBool:[[ETPPiDockControl hardwareInstance] isBarcodeReaderOn]
                                    ];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)readBarCode:(CDVInvokedUrlCommand*) command
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    [center addObserverForName:IDBarcodeReaderReadDataNotification object:nil
+        queue:mainQueue usingBlock:^(NSNotification *notification) {
+        [self didReadBarCodeData : notification withCommand: command];
+    }];
 }
 
 - (void) playSound
@@ -156,17 +166,6 @@
         [self playSound];
     
     });
-}
-
-
-- (void)didReadBarCodeData:(NSNotification*)notification withCommand: (CDVInvokedUrlCommand*) command  {
-    
-    NSDictionary *data = notification.userInfo;
-    CDVPluginResult* result = [CDVPluginResult
-                                       resultWithStatus: CDVCommandStatus_OK
-                                       messageAsString:data[@"bcrData"]
-                                       ];
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
 - (void)clearMSR:(CDVInvokedUrlCommand*) command
