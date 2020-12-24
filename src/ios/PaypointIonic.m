@@ -51,7 +51,7 @@
 
 - (void)setCustomerDisplayBacklightOnOff:(CDVInvokedUrlCommand*) command
 {
-    BOOL onOff = [[command.arguments objectAtIndex:0] boolValue];
+    BOOL onOff = [command.arguments objectAtIndex:0];
     [[ETPPiDockControl hardwareInstance] setCustomerDisplayBacklightOn:onOff];
     CDVPluginResult* result = [CDVPluginResult
                                    resultWithStatus: CDVCommandStatus_OK
@@ -142,18 +142,6 @@
     }];
 }
 
-- (void) playSound
-{
-//    Play beep sound after barcode scan
-    SystemSoundID soundID;
-    NSString *path   = [[NSBundle mainBundle] pathForResource:@"aurora" ofType:@"m4r"];
-    NSURL* url = [NSURL fileURLWithPath:path];
-    CFURLRef soundFileURLRef;
-    soundFileURLRef = (__bridge CFURLRef) url;
-    AudioServicesCreateSystemSoundID(soundFileURLRef, &soundID);
-    AudioServicesPlaySystemSound(soundID);
-}
-
 - (void)didReadBarCodeData:(NSNotification*)notification withCommand: (CDVInvokedUrlCommand*) command  {
     
     NSDictionary *data = notification.userInfo;
@@ -163,8 +151,8 @@
                                            messageAsString:data[@"bcrData"]
                                            ];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-        [self playSound];
-    
+        AudioServicesPlaySystemSound(1003);
+
     });
 }
 
@@ -180,32 +168,42 @@
 
 - (void)readMSR:(CDVInvokedUrlCommand*) command
 {
+    scanMSRDataCallbackId = [command.callbackId copy];
     [[ETPPiDockControl hardwareInstance] clearMSR];
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-    [center addObserverForName:IDMagneticStripeReaderReadDataNotification object:nil
-        queue:mainQueue usingBlock:^(NSNotification *notification) {
-        [self didReadMSRData : notification withCommand: command];
-    }];
-    
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveObjectFromNotification: command:) name:IDMagneticStripeReaderReadDataNotification object:nil];
-    // CDVPluginResult* result = [CDVPluginResult
-    //                                resultWithStatus: CDVCommandStatus_OK
-    //                                messageAsString:@"Successed"
-    //                                ];
-    // [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+//    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+//    [center addObserverForName:IDMagneticStripeReaderReadDataNotification object:nil
+//        queue:mainQueue usingBlock:^(NSNotification *notification) {
+//        [self didReadMSRData : notification withCommand: command];
+//    }];
+//    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReadMSRData:) name:IDMagneticStripeReaderReadDataNotification object:nil];
 }
 
-- (void)didReadMSRData:(NSNotification*)notification withCommand: (CDVInvokedUrlCommand*) command  {
+- (void)stopReadMSRData:(CDVInvokedUrlCommand*) command {
+    [[NSNotificationCenter defaultCenter] removeObserver:IDMagneticStripeReaderReadDataNotification];
+    if(scanMSRDataCallbackId) {
+        scanMSRDataCallbackId = nil;
+    }
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+- (void)didReadMSRData:(NSNotification*)notification {
+    if(scanMSRDataCallbackId) {
+        NSDictionary *data = notification.userInfo;
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsDictionary:data];
+        [result setKeepCallbackAsBool:TRUE];
+        [self.commandDelegate sendPluginResult:result callbackId:scanMSRDataCallbackId];
+    }
     
-    NSDictionary *data = notification.userInfo;
-    
-   
-        CDVPluginResult* result = [CDVPluginResult
-                                       resultWithStatus: CDVCommandStatus_OK
-                                       messageAsDictionary:data
-                                       ];
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+//- (void)didReadMSRData:(NSNotification*)notification withCommand: (CDVInvokedUrlCommand*) command  {
+//
+//    NSDictionary *data = notification.userInfo;
+//    CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsDictionary:data];
+//    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         // Set count label
 //        NSMutableString *msrData = [[NSMutableString alloc]init];
 //        NSString *result = [NSString stringWithFormat:@"%@",data[IDOCK_MSR_DATA]];
@@ -285,7 +283,7 @@
 //            [self showErrorAlert];
 //        });
  //   }
-}
+//}
 
 - (void)isPayPointConnected: (CDVInvokedUrlCommand*)command {
     CDVPluginResult *pluginResult = nil;
@@ -296,6 +294,15 @@
     }
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 };
+
+- (void)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = [CDVPluginResult
+                                   resultWithStatus: CDVCommandStatus_OK
+                                   messageAsBool:[[ETPPiDockControl hardwareInstance] checkCashDrawerStatus]
+                                   ];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
 
 - (void)checkPaperStatus:(CDVInvokedUrlCommand*)command 
 {
@@ -375,11 +382,11 @@
         
     });
 }
-
 #pragma mark dealloc
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
 @end

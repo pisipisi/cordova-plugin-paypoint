@@ -91,6 +91,10 @@ exports.readMSR = function(success, error) {
     exec(successWrapper, error, 'PaypointIonic', 'readMSR');
 };
 
+exports.stopReadMSR = function(success, error) {
+    exec(success, error, 'PaypointIonic', 'stopReadMSRData');
+};
+
 exports.checkPaperStatus = function(success, error) {
     exec(success, error, 'PaypointIonic', 'checkPaperStatus');
 };
