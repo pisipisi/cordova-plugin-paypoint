@@ -192,11 +192,15 @@
 - (void)didReadMSRData:(NSNotification*)notification {
     if(scanMSRDataCallbackId) {
         NSDictionary *data = notification.userInfo;
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsDictionary:data];
+        CDVPluginResult* result = nil;
+        if (![data objectForKey:@"Exception"]) {
+            result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsDictionary:data];
+        } else {
+            result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsDictionary:data];
+        }
         [result setKeepCallbackAsBool:TRUE];
         [self.commandDelegate sendPluginResult:result callbackId:scanMSRDataCallbackId];
-    }
-    
+    } 
 }
 
 //- (void)didReadMSRData:(NSNotification*)notification withCommand: (CDVInvokedUrlCommand*) command  {
