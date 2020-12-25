@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-paypoint",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "cordova plugin for elo paypoint",
   "cordova": {
     "id": "cordova-plugin-paypoint",
@@ -12,9 +12,15 @@
   "keywords": [
     "ecosystem:cordova",
     "cordova-ios",
+    "paypoint",
     "cordova-android"
   ],
   "author": "Thanh Nguyen",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pisipisi/cordova-plugin-paypoint.git"
+  },
+  "homepage": "https://github.com/pisipisi/cordova-plugin-paypoint",
   "dependencies": {}
 }

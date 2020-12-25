@@ -150,11 +150,24 @@
                                            resultWithStatus: CDVCommandStatus_OK
                                            messageAsString:data[@"bcrData"]
                                            ];
+        [result setKeepCallbackAsBool: TRUE] 
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         AudioServicesPlaySystemSound(1003);
 
     });
 }
+
+- (void)stopReadBarCode:(CDVInvokedUrlCommand*) command
+{
+    [[ETPPiDockControl hardwareInstance] setBarcodeReaderOn:NO];
+    [[NSNotificationCenter defaultCenter] removeObserver:IDBarcodeReaderReadDataNotification];
+    CDVPluginResult* result = [CDVPluginResult
+                                   resultWithStatus: CDVCommandStatus_OK
+                                   messageAsString: @"Successed"
+                                   ];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
 
 - (void)clearMSR:(CDVInvokedUrlCommand*) command
 {
@@ -298,6 +311,37 @@
     }
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 };
+
+
+- (void)onPayPointConnected: (CDVInvokedUrlCommand*)command {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    
+    [center addObserverForName:IDAccessoryDidConnectNotification object:nil
+        queue:mainQueue usingBlock:^(NSNotification *notification) {
+        [self updateAccessoryConnectionStatus : notification withCommand: command];
+    }];
+    
+    [center addObserverForName:IDAccessoryDidDisconnectNotification object:nil
+        queue:mainQueue usingBlock:^(NSNotification *notification) {
+        [self updateAccessoryConnectionStatus : notification withCommand: command];
+    }];
+    
+}
+
+- (void)updateAccessoryConnectionStatus: (NSNotification*)notification withCommand: (CDVInvokedUrlCommand*) command
+{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CDVPluginResult* result = [CDVPluginResult
+                                           resultWithStatus: CDVCommandStatus_OK
+                                           messageAsBool:ETPPiDockControl.hardwareInstance.isConnected
+                                           ];
+        [result setKeepCallbackAsBool:YES];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    });
+}
+
 
 - (void)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command
 {

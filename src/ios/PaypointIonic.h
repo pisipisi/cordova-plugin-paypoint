@@ -20,9 +20,11 @@
 - (void)customerDisplayIncreaseRightScrollSpeed:(CDVInvokedUrlCommand*) command;
 - (void)setBarCodeReaderOnOff:(CDVInvokedUrlCommand*) command;
 - (void)readBarCode:(CDVInvokedUrlCommand*) command;
+- (void)stopReadBarCode:(CDVInvokedUrlCommand*) command;
 - (void)clearMSR:(CDVInvokedUrlCommand*) command;
 - (void)readMSR:(CDVInvokedUrlCommand*) command;
 - (void)stopReadMSRData:(CDVInvokedUrlCommand*) command;
 - (void)isPayPointConnected: (CDVInvokedUrlCommand*)command;
+- (void)onPayPointConnected: (CDVInvokedUrlCommand*)command;
 - (void)cashDrawerStatusDidChange:(CDVInvokedUrlCommand*)command;
 @end

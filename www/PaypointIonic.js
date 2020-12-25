@@ -31,6 +31,10 @@ exports.isPayPointConnected = function(success, error) {
     exec(success, error, 'PaypointIonic', 'isPayPointConnected');
 };
 
+exports.onPayPointConnected = function(success, error) {
+    exec(success, error, 'PaypointIonic', 'onPayPointConnected');
+};
+
 exports.openDraw = function(success, error) {
     exec(success, error, 'PaypointIonic', 'openDraw');
 };
@@ -77,6 +81,10 @@ exports.setBarCodeReaderOnOff = function(onOff, success, error) {
 
 exports.readBarCode = function(success, error) {
     exec(success, error, 'PaypointIonic', 'readBarCode');
+}; 
+
+exports.stopReadBarCode = function(success, error) {
+    exec(success, error, 'PaypointIonic', 'stopReadBarCode');
 }; 
 
 exports.clearMSR = function(success, error) {
