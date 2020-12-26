@@ -5,7 +5,7 @@
         <clobbers target="cordova.plugins.PaypointIonic" />
     </js-module>
     <platform name="ios">
-        <hook type="after_platform_add" src="hooks/embedframework/addEmbedded.js" />
+        <!-- <hook type="after_platform_add" src="hooks/embedframework/addEmbedded.js" /> -->
         <config-file parent="/*" target="config.xml">
             <feature name="PaypointIonic">
                 <param name="ios-package" value="PaypointIonic" />
