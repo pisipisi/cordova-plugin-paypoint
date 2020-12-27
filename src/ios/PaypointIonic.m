@@ -150,7 +150,7 @@
                                            resultWithStatus: CDVCommandStatus_OK
                                            messageAsString:data[@"bcrData"]
                                            ];
-        [result setKeepCallbackAsBool: TRUE] 
+        [result setKeepCallbackAsBool: TRUE];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         AudioServicesPlaySystemSound(1003);
 
